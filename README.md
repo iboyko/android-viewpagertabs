@@ -11,7 +11,7 @@ ViewPager from the [Android Compatibility Library][2]
 Usage
 =====
 
-*For an example of how to use this, see [android-viewpagertabs-example][3]
+For an example of how to use this, see [android-viewpagertabs-example][3]
 
   1. Including In Your Project
 
@@ -59,14 +59,14 @@ Usage
 Developed By
 ============
 
- * Andreas Stütz - <andreas.stuetz@gmail.com>
+ * Andreas St&uuml;tz - <andreas.stuetz@gmail.com>
 
 
 
 License
 =======
 
-    Copyright 2011 Andreas Stütz
+    Copyright 2011 Andreas St&uuml;tz
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
