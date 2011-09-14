@@ -4,7 +4,7 @@ ViewPagerTabs
 An implementation of the [swipey tabs][1] for the
 ViewPager from the [Android Compatibility Library][2]
 
-![ViewPagerTabs Screenshots][9]
+![ViewPagerTabs Screenshots][7]
 
 
 
@@ -19,7 +19,7 @@ For an example of how to use this, see [android-viewpagertabs-example][3]
 		Eclipse or ant.
 		
 		This project depends on the `ViewPager` class which is available in the
-		[Android Compatibility Library][6].
+		[Android Compatibility Library][2].
 
   2. Include com.astuetz.viewpagertabs.ViewPagerTabs in your view.
 
@@ -55,6 +55,45 @@ For an example of how to use this, see [android-viewpagertabs-example][3]
      *Note*: The adapter of the ViewPager has to implement `ViewPagerTabProvider`.
 
 
+Styling
+=======
+
+You can customize the tabs either by xml-attributes or by setter-methods:
+
+ 1. Customize by XML-attributes:
+ 	
+ 	<com.astuetz.viewpagertabs.ViewPagerTabs
+		   android:id="@+id/tabs"
+		   android:layout_width="fill_parent"
+		   android:layout_height="wrap_content"
+		   viewpagertabs:backgroundColor="#3B3B3B" 
+	       viewpagertabs:backgroundColorPressed="#55333E73"
+	       viewpagertabs:textColor="#D8D8D8" 
+	       viewpagertabs:textColorCenter="#FFFC7F" 
+	       viewpagertabs:lineColor="#FFFC7F"
+	       viewpagertabs:lineHeight="4dip"
+	       viewpagertabs:tabPaddingLeft="15dip"
+	       viewpagertabs:tabPaddingRight="15dip"
+	       viewpagertabs:tabPaddingBottom="2dip"
+	       viewpagertabs:tabPaddingTop="5dip"
+	       viewpagertabs:textSize="12sp" />
+		   
+	*Note*: Don't forget to define the namespace: xmlns:viewpagertabs="http://schemas.android.com/apk/res/your.package.name"
+
+ 2. Customize by setter-methods:
+ 
+ 	ViewPagerTabs tabs = (ViewPagerTabs) findViewById(R.id.tabs);
+ 	
+	tabs.setBackgroundColor(0x00FFFFFF);
+	tabs.setBackgroundColorPressed(0x33333333);
+	tabs.setTextColor(0x44A80000);
+	tabs.setTextColorCenter(0xFFA80000);
+	tabs.setLineColor(0xFFA80000);
+	tabs.setLineHeight(5);
+	tabs.setTextSize(22);
+	tabs.setTabPadding(5, 1, 5, 10);
+
+
 
 Developed By
 ============
@@ -66,7 +105,7 @@ Developed By
 License
 =======
 
-    Copyright 2011 Andreas St&uuml;tz
+    Copyright 2011 Andreas Stuetz
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -86,9 +125,9 @@ License
 
 
  [1]: http://www.pushing-pixels.org/2011/08/11/android-tips-and-tricks-swipey-tabs.html
- [3]: http://www.google.com
- [4]: https://github.com/pakerfeldt/android-viewflow
+ [2]: http://developer.android.com/sdk/compatibility-library.html
+ [3]: https://github.com/astuetz/android-viewpagertabs-example
  [4]: http://developer.android.com/guide/developing/projects/projects-eclipse.html
  [5]: http://developer.android.com/guide/developing/projects/projects-eclipse.html#ReferencingLibraryProject
- [6]: http://developer.android.com/sdk/compatibility-library.html
- [7]: http://www.google.com/intl/en_com/images/srpr/logo3w.png
+ 
+ [7]: https://github.com/astuetz/android-viewpagertabs-example/raw/master/tabs.png
