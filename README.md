@@ -15,11 +15,10 @@ For an example of how to use this, see [android-viewpagertabs-example][3]
 
   1. Including In Your Project
 
-		This is an [Android library project][4], you can include it by [referencing it as a library project][5] in
+		This is an Android library project, you can include it by referencing it as a library project in
 		Eclipse or ant.
 		
-		This project depends on the `ViewPager` class which is available in the
-		[Android Compatibility Library][2].
+		This project depends on the `ViewPager` class which is available in the Android Compatibility Library.
 
   2. Include com.astuetz.viewpagertabs.ViewPagerTabs in your view.
 
@@ -62,36 +61,36 @@ You can customize the tabs either by xml-attributes or by setter-methods:
 
  1. Customize by XML-attributes:
  	
- 	<com.astuetz.viewpagertabs.ViewPagerTabs
-		   android:id="@+id/tabs"
-		   android:layout_width="fill_parent"
-		   android:layout_height="wrap_content"
-		   viewpagertabs:backgroundColor="#3B3B3B" 
-	       viewpagertabs:backgroundColorPressed="#55333E73"
-	       viewpagertabs:textColor="#D8D8D8" 
-	       viewpagertabs:textColorCenter="#FFFC7F" 
-	       viewpagertabs:lineColor="#FFFC7F"
-	       viewpagertabs:lineHeight="4dip"
-	       viewpagertabs:tabPaddingLeft="15dip"
-	       viewpagertabs:tabPaddingRight="15dip"
-	       viewpagertabs:tabPaddingBottom="2dip"
-	       viewpagertabs:tabPaddingTop="5dip"
-	       viewpagertabs:textSize="12sp" />
+		<com.astuetz.viewpagertabs.ViewPagerTabs
+			android:id="@+id/tabs"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			viewpagertabs:backgroundColor="#3B3B3B" 
+			viewpagertabs:backgroundColorPressed="#55333E73"
+		    viewpagertabs:textColor="#D8D8D8" 
+		    viewpagertabs:textColorCenter="#FFFC7F" 
+		    viewpagertabs:lineColor="#FFFC7F"
+		    viewpagertabs:lineHeight="4dip"
+		    viewpagertabs:tabPaddingLeft="15dip"
+		    viewpagertabs:tabPaddingRight="15dip"
+		    viewpagertabs:tabPaddingBottom="2dip"
+		    viewpagertabs:tabPaddingTop="5dip"
+		    viewpagertabs:textSize="12sp" />
 		   
 	*Note*: Don't forget to define the namespace: xmlns:viewpagertabs="http://schemas.android.com/apk/res/your.package.name"
 
  2. Customize by setter-methods:
  
- 	ViewPagerTabs tabs = (ViewPagerTabs) findViewById(R.id.tabs);
+		ViewPagerTabs tabs = (ViewPagerTabs) findViewById(R.id.tabs);
  	
-	tabs.setBackgroundColor(0x00FFFFFF);
-	tabs.setBackgroundColorPressed(0x33333333);
-	tabs.setTextColor(0x44A80000);
-	tabs.setTextColorCenter(0xFFA80000);
-	tabs.setLineColor(0xFFA80000);
-	tabs.setLineHeight(5);
-	tabs.setTextSize(22);
-	tabs.setTabPadding(5, 1, 5, 10);
+		tabs.setBackgroundColor(0x00FFFFFF);
+		tabs.setBackgroundColorPressed(0x33333333);
+		tabs.setTextColor(0x44A80000);
+		tabs.setTextColorCenter(0xFFA80000);
+		tabs.setLineColor(0xFFA80000);
+		tabs.setLineHeight(5);
+		tabs.setTextSize(22);
+		tabs.setTabPadding(5, 1, 5, 10);
 
 
 
