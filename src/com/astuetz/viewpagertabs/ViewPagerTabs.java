@@ -179,11 +179,21 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		
 		final View c = getChildAt(0);
-		final TextView tab = (TextView) c;
-		tab.measure(0, 0);
 		
-		setMeasuredDimension(resolveSize(0, widthMeasureSpec),
-		    resolveSize(tab.getMeasuredHeight() + this.getPaddingTop() + this.getPaddingBottom(), heightMeasureSpec));
+		if (c != null) {
+			final TextView tab = (TextView) c;
+			LayoutParams layoutParams = (LayoutParams) tab.getLayoutParams();
+			final int widthSpec = MeasureSpec.makeMeasureSpec(layoutParams.width, MeasureSpec.EXACTLY);
+			final int heightSpec = MeasureSpec.makeMeasureSpec(layoutParams.height, MeasureSpec.EXACTLY);
+			tab.measure(widthSpec, heightSpec);
+			
+			setMeasuredDimension(resolveSize(0, widthMeasureSpec),
+			    resolveSize(tab.getMeasuredHeight() + this.getPaddingTop() + this.getPaddingBottom(), heightMeasureSpec));
+			
+		} else {
+			setMeasuredDimension(resolveSize(0, widthMeasureSpec),
+			    resolveSize(this.getPaddingTop() + this.getPaddingBottom(), heightMeasureSpec));
+		}
 		
 		// first time measuring, set outside offset (if not set manually),
 		// measure children and calculate initial positions
