@@ -2,11 +2,6 @@ package com.astuetz.viewpagertabs;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Shader;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.ViewPager;
@@ -28,9 +23,8 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		Left, Right, Center
 	}
 	
-	// Some values for creating shadows to the left and right of the screen
-	private static final int SHADOW_WIDTH = 40;
-	private static final int SHADOW_DARK_ALPHA = 0xDD;
+	// Length of the horizontal fading edges
+	private static final int SHADOW_WIDTH = 35;
 	
 	// Context.
 	private Context mContext;
@@ -51,13 +45,13 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 	
 	// These values will be passed to every child ({@link ViewPagerTab})
 	
-	private int mBackgroundColor = 0xFF3B3B3B;
 	private int mBackgroundColorPressed = 0x9943797F;
 	
 	private int mTextColor = 0xFF999999;
 	private int mTextColorCenter = 0xFF91A438;
 	
-	private int mLineColor = 0xFF91A438;
+	private int mLineColor = 0x00000000;
+	private int mLineColorCenter = 0xFF91A438;
 	private int mLineHeight = 3;
 	
 	
@@ -87,13 +81,12 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		
 		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewPagerTabs, defStyle, 0);
 		
-		mBackgroundColor = a.getColor(R.styleable.ViewPagerTabs_backgroundColor, mBackgroundColor);
 		mBackgroundColorPressed = a.getColor(R.styleable.ViewPagerTabs_backgroundColorPressed, mBackgroundColorPressed);
 		
 		mTextColor = a.getColor(R.styleable.ViewPagerTabs_textColor, mTextColor);
 		mTextColorCenter = a.getColor(R.styleable.ViewPagerTabs_textColorCenter, mTextColorCenter);
 		
-		mLineColor = a.getColor(R.styleable.ViewPagerTabs_lineColor, mLineColor);
+		mLineColorCenter = a.getColor(R.styleable.ViewPagerTabs_lineColorCenter, mLineColorCenter);
 		mLineHeight = a.getDimensionPixelSize(R.styleable.ViewPagerTabs_lineHeight, mLineHeight);
 		
 		mTextSize = a.getDimension(R.styleable.ViewPagerTabs_textSize, mTextSize);
@@ -107,9 +100,41 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		
 		a.recycle();
 		
-		this.setBackgroundColor(mBackgroundColor);
+		setHorizontalFadingEdgeEnabled(true);
+		setFadingEdgeLength((int) (getResources().getDisplayMetrics().density * SHADOW_WIDTH));
+		setWillNotDraw(false);
 	}
 	
+	@Override
+	protected float getLeftFadingEdgeStrength() {
+		return 1.0f;
+	}
+	
+	@Override
+	protected float getRightFadingEdgeStrength() {
+		return 1.0f;
+	}
+	
+	
+	/**
+	 * Notify the view that new data is available.
+	 */
+	public void notifyDatasetChanged() {
+		
+		// remove all old child views
+		this.removeAllViews();
+		
+		// add new tabs
+		for (int i = 0; i < mPager.getAdapter().getCount(); i++) {
+			addTab(i, ((ViewPagerTabProvider) mPager.getAdapter()).getTitle(i));
+		}
+		
+		applyStyles();
+		
+		calculateNewPositions(true);
+		this.requestLayout();
+		
+	}
 	
 	/**
 	 * Binds the {@link ViewPager} to this instance
@@ -127,14 +152,7 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		mPager.setCurrentItem(this.mPosition);
 		mPager.setOnPageChangeListener(this);
 		
-		for (int i = 0; i < pager.getAdapter().getCount(); i++) {
-			addTab(i, ((ViewPagerTabProvider) pager.getAdapter()).getTitle(i));
-		}
-		
-		applyStyles();
-		
-		calculateNewPositions(true);
-		this.requestLayout();
+		notifyDatasetChanged();
 	}
 	
 	/**
@@ -148,6 +166,13 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 	public void setViewPager(ViewPager pager, int position) {
 		this.mPosition = position;
 		setViewPager(pager);
+	}
+	
+	/**
+	 * Returns the current position
+	 */
+	public int getPosition() {
+		return this.mPosition;
 	}
 	
 	
@@ -443,9 +468,6 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		for (int i = 0; i < count; i++) {
 			ViewPagerTab tab = (ViewPagerTab) getChildAt(i);
 			
-			final float x0 = 0.0f;
-			final float x1 = 1.0f;
-			
 			final float y0 = tab.currentPos;
 			float y1 = 0.0f;
 			
@@ -456,9 +478,7 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 			else
 				y1 = tab.currentPos;
 			
-			final int y = (int) (y0 + (y1 * (x - x0) - y0 * (x - x0)) / (x1 - x0));
-			
-			tab.layoutPos = y;
+			tab.layoutPos = (int) (y0 + (y1 * x - y0 * x));
 		}
 		
 		this.requestLayout();
@@ -470,45 +490,6 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		calculateNewPositions(false);
 		this.requestLayout();
 	}
-	
-	
-	
-	private Paint mShadowLeftPaint = new Paint();
-	private Paint mShadowRightPaint = new Paint();
-	
-	/**
-	 * Here the shadows ("translucent fading close to the edges") are drawn above
-	 * the child views
-	 */
-	@Override
-	protected void dispatchDraw(Canvas canvas) {
-		super.dispatchDraw(canvas);
-		
-		int shadowDark = Color.argb(SHADOW_DARK_ALPHA, Color.red(mBackgroundColor), Color.green(mBackgroundColor),
-		    Color.blue(mBackgroundColor));
-		int shadowLight = Color.argb(0x00, Color.red(mBackgroundColor), Color.green(mBackgroundColor),
-		    Color.blue(mBackgroundColor));
-		
-		
-		final Shader shadowLeftShader = new LinearGradient(0, 0, SHADOW_WIDTH, 0, shadowDark, shadowLight,
-		    Shader.TileMode.MIRROR);
-		final Shader shadowRightShader = new LinearGradient(this.getWidth() - SHADOW_WIDTH, 0, this.getWidth(), 0,
-		    shadowLight, shadowDark,
-		    Shader.TileMode.MIRROR);
-		
-		final Paint shadowLeftPaint = mShadowLeftPaint;
-		shadowLeftPaint.setShader(shadowLeftShader);
-		shadowLeftPaint.setAntiAlias(true);
-		
-		final Paint shadowRightPaint = mShadowRightPaint;
-		shadowRightPaint.setShader(shadowRightShader);
-		shadowRightPaint.setAntiAlias(true);
-		
-		
-		canvas.drawRect(0, 0, SHADOW_WIDTH, this.getHeight(), shadowLeftPaint);
-		canvas.drawRect(this.getWidth() - SHADOW_WIDTH, 0, this.getWidth(), this.getHeight(), shadowRightPaint);
-	}
-	
 	
 	
 	/*
@@ -543,11 +524,6 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		applyStyles();
 	}
 	
-	public void setBackgroundColor(int color) {
-		this.mBackgroundColor = color;
-		applyStyles();
-	}
-	
 	public void setBackgroundColorPressed(int color) {
 		this.mBackgroundColorPressed = color;
 		applyStyles();
@@ -568,8 +544,8 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		applyStyles();
 	}
 	
-	public void setLineColor(int color) {
-		this.mLineColor = color;
+	public void setLineColorCenter(int color) {
+		this.mLineColorCenter = color;
 		applyStyles();
 	}
 	
@@ -597,15 +573,13 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 			
 			tab.setPadding(mTabPaddingLeft, mTabPaddingTop, mTabPaddingRight, mLineHeight + mTabPaddingBottom - 4);
 			tab.setTextColors(mTextColor, mTextColorCenter);
-			tab.setLineColors(mBackgroundColor, mLineColor);
+			tab.setLineColors(mLineColor, mLineColorCenter);
 			tab.setLineHeight(mLineHeight);
 			tab.setBackgroundColorPressed(mBackgroundColorPressed);
 			tab.setTextSize(mTextSize);
 			
 		}
-		
-		super.setBackgroundColor(mBackgroundColor);
-		
+
 		measureChildren();
 		
 		calculateNewPositions(true);
@@ -642,11 +616,10 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		SavedState savedState = (SavedState) state;
 		super.onRestoreInstanceState(savedState.getSuperState());
 		mPosition = savedState.position;
-		mBackgroundColor = savedState.backgroundColor;
 		mBackgroundColorPressed = savedState.backgroundColorPressed;
 		mTextColor = savedState.textColor;
 		mTextColorCenter = savedState.textColorCenter;
-		mLineColor = savedState.lineColor;
+		mLineColorCenter = savedState.lineColorCenter;
 		mLineHeight = savedState.lineHeight;
 		mTabPaddingLeft = savedState.tabPaddingLeft;
 		mTabPaddingTop = savedState.tabPaddingTop;
@@ -661,11 +634,10 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		Parcelable superState = super.onSaveInstanceState();
 		SavedState savedState = new SavedState(superState);
 		savedState.position = mPosition;
-		savedState.backgroundColor = mBackgroundColor;
 		savedState.backgroundColorPressed = mBackgroundColorPressed;
 		savedState.textColor = mTextColor;
 		savedState.textColorCenter = mTextColorCenter;
-		savedState.lineColor = mLineColor;
+		savedState.lineColorCenter = mLineColorCenter;
 		savedState.lineHeight = mLineHeight;
 		savedState.tabPaddingLeft = mTabPaddingLeft;
 		savedState.tabPaddingTop = mTabPaddingTop;
@@ -678,15 +650,15 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 	
 	/**
 	 * This holds our state
-	 *
+	 * 
 	 */
 	static class SavedState extends BaseSavedState {
+		
 		int position;
-		int backgroundColor;
 		int backgroundColorPressed;
 		int textColor;
 		int textColorCenter;
-		int lineColor;
+		int lineColorCenter;
 		int lineHeight;
 		int tabPaddingLeft;
 		int tabPaddingTop;
@@ -701,11 +673,10 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		private SavedState(Parcel in) {
 			super(in);
 			position = in.readInt();
-			backgroundColor = in.readInt();
 			backgroundColorPressed = in.readInt();
 			textColor = in.readInt();
 			textColorCenter = in.readInt();
-			lineColor = in.readInt();
+			lineColorCenter = in.readInt();
 			lineHeight = in.readInt();
 			tabPaddingLeft = in.readInt();
 			tabPaddingTop = in.readInt();
@@ -718,11 +689,10 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		public void writeToParcel(Parcel dest, int flags) {
 			super.writeToParcel(dest, flags);
 			dest.writeInt(position);
-			dest.writeInt(backgroundColor);
 			dest.writeInt(backgroundColorPressed);
 			dest.writeInt(textColor);
 			dest.writeInt(textColorCenter);
-			dest.writeInt(lineColor);
+			dest.writeInt(lineColorCenter);
 			dest.writeInt(lineHeight);
 			dest.writeInt(tabPaddingLeft);
 			dest.writeInt(tabPaddingTop);

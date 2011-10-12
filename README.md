@@ -25,7 +25,8 @@ For an example of how to use this, see [android-viewpagertabs-example][3]
 		<com.astuetz.viewpagertabs.ViewPagerTabs
 		   android:id="@+id/tabs"
 		   android:layout_width="fill_parent"
-		   android:layout_height="wrap_content" />
+		   android:layout_height="wrap_content"
+		   android:background="#FF3B3B3B" />
             
      If you want to add a colored line below the tabs, use something like this:
      
@@ -65,11 +66,10 @@ You can customize the tabs either by xml-attributes or by setter-methods:
 			android:id="@+id/tabs"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			viewpagertabs:backgroundColor="#3B3B3B" 
 			viewpagertabs:backgroundColorPressed="#55333E73"
 		    viewpagertabs:textColor="#D8D8D8" 
 		    viewpagertabs:textColorCenter="#FFFC7F" 
-		    viewpagertabs:lineColor="#FFFC7F"
+		    viewpagertabs:lineColorCenter="#FFFC7F"
 		    viewpagertabs:lineHeight="4dip"
 		    viewpagertabs:tabPaddingLeft="15dip"
 		    viewpagertabs:tabPaddingRight="15dip"
@@ -87,7 +87,7 @@ You can customize the tabs either by xml-attributes or by setter-methods:
 		tabs.setBackgroundColorPressed(0x33333333);
 		tabs.setTextColor(0x44A80000);
 		tabs.setTextColorCenter(0xFFA80000);
-		tabs.setLineColor(0xFFA80000);
+		tabs.setLineColorCenter(0xFFA80000);
 		tabs.setLineHeight(5);
 		tabs.setTextSize(22);
 		tabs.setTabPadding(5, 1, 5, 10);

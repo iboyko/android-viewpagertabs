@@ -16,7 +16,7 @@
             name="textColorCenter"
             format="color" />
         <attr
-            name="lineColor"
+            name="lineColorCenter"
             format="color" />
         <attr
             name="lineHeight"
