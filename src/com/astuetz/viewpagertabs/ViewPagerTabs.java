@@ -266,11 +266,8 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 			int diff = Math.abs(center - tabCenter);
 			
 			if (diff <= highlightOffset) {
-				final int x0 = 0;
 				final int x1 = highlightOffset;
-				final int y0 = 0;
-				final int y1 = 100;
-				final int y = (int) (y0 + (y1 * (diff - x0) - y0 * (diff - x0)) / (x1 - x0));
+				final int y = (int) 100 * diff / x1;
 				tab.setCenterPercent(100 - y);
 			} else {
 				tab.setCenterPercent(0);
