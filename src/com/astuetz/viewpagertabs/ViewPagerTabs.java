@@ -8,11 +8,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.view.View.BaseSavedState;
+import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 
 
-public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListener {
+public class ViewPagerTabs extends ViewGroup implements OnPageChangeListener {
 	
 	@SuppressWarnings("unused")
 	private static final String TAG = "ViewPagerTabs";
@@ -448,7 +452,7 @@ public class ViewPagerTabs extends RelativeLayout implements OnPageChangeListene
 		
 		final int count = getChildCount();
 		
-		final int currentScrollX = mPosition * mPager.getWidth();
+		final int currentScrollX = mPosition * (mPager.getWidth() + mPager.getPageMargin());
 		
 		Direction dir = Direction.Center;
 		

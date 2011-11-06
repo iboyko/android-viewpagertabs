@@ -2,7 +2,7 @@ ViewPagerTabs
 =============
 
 An implementation of the [swipey tabs][1] for the
-ViewPager from the [Android Compatibility Library][2]
+ViewPager from the [Android Support Package][2]
 
 ![ViewPagerTabs Screenshots][7]
 
@@ -18,7 +18,8 @@ For an example of how to use this, see [android-viewpagertabs-example][3]
 		This is an Android library project, you can include it by referencing it as a library project in
 		Eclipse or ant.
 		
-		This project depends on the `ViewPager` class which is available in the Android Compatibility Library.
+		This project depends on the `ViewPager` class which is available in the Android Support Package.
+		*IMPORTANT* Make sure to use the latest version of the Support Package!
 
   2. Include com.astuetz.viewpagertabs.ViewPagerTabs in your view.
 
@@ -66,18 +67,18 @@ You can customize the tabs either by xml-attributes or by setter-methods:
 			android:id="@+id/tabs"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			viewpagertabs:backgroundColorPressed="#55333E73"
-		    viewpagertabs:textColor="#D8D8D8" 
-		    viewpagertabs:textColorCenter="#FFFC7F" 
-		    viewpagertabs:lineColorCenter="#FFFC7F"
-		    viewpagertabs:lineHeight="4dip"
-		    viewpagertabs:tabPaddingLeft="15dip"
-		    viewpagertabs:tabPaddingRight="15dip"
-		    viewpagertabs:tabPaddingBottom="2dip"
-		    viewpagertabs:tabPaddingTop="5dip"
-		    viewpagertabs:textSize="12sp" />
+			app:backgroundColorPressed="#55333E73"
+		    app:textColor="#D8D8D8" 
+		    app:textColorCenter="#FFFC7F" 
+		    app:lineColorCenter="#FFFC7F"
+		    app:lineHeight="4dip"
+		    app:tabPaddingLeft="15dip"
+		    app:tabPaddingRight="15dip"
+		    app:tabPaddingBottom="2dip"
+		    app:tabPaddingTop="5dip"
+		    app:textSize="12sp" />
 		   
-	*Note*: Don't forget to define the namespace: xmlns:viewpagertabs="http://schemas.android.com/apk/res/your.package.name"
+	*Note*: Don't forget to define the namespace: xmlns:app="http://schemas.android.com/apk/res/your.package.name"
 
  2. Customize by setter-methods:
  
